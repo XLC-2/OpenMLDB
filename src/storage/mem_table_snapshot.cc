@@ -27,7 +27,7 @@
 #include <utility>
 
 #include "base/file_util.h"
-#include "base/glog_wapper.h"
+#include "base/glog_wrapper.h"
 #include "base/hash.h"
 #include "base/slice.h"
 #include "base/strings.h"
@@ -303,7 +303,8 @@ uint64_t MemTableSnapshot::CollectDeletedKey(std::shared_ptr<Table> table, uint6
                 continue;
             }
             if (cur_offset + 1 != entry.log_index()) {
-                PDLOG(WARNING, "log missing expect offset %lu but %ld", cur_offset + 1, entry.log_index());
+                PDLOG(WARNING, "log missing expect offset %lu but %ld. tid %u pid %u",
+                        cur_offset + 1, entry.log_index(), tid_, pid_);
                 continue;
             }
             cur_offset = entry.log_index();
@@ -425,7 +426,8 @@ int MemTableSnapshot::MakeSnapshot(std::shared_ptr<Table> table, uint64_t& out_o
                 continue;
             }
             if (cur_offset + 1 != entry.log_index()) {
-                PDLOG(WARNING, "log missing expect offset %lu but %ld", cur_offset + 1, entry.log_index());
+                PDLOG(WARNING, "log missing expect offset %lu but %ld. tid %u pid %u",
+                        cur_offset + 1, entry.log_index(), tid_, pid_);
                 continue;
             }
             cur_offset = entry.log_index();
